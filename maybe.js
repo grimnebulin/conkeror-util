@@ -36,6 +36,7 @@ function Some(value) {
         foreach: f => (f(value), obj),
         orElse: _ => obj,
         getOrElse: _ => value,
+        toString: () => "Some(" + value + ")",
         get empty() { return false },
         get nonempty() { return true }
     };
@@ -48,6 +49,7 @@ function None() {
         foreach: _ => obj,
         orElse: f => f(),
         getOrElse: x => x,
+        toString: () => "None",
         get empty() { return true },
         get nonempty() { return false }
     };
