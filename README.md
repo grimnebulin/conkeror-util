@@ -46,6 +46,60 @@ Returns `true` is `maybe` is a `Some`, `false` otherwise.
 
 Note that `empty` and `nonempty` are attributes, not functions.
 
+## Try
+
+A simple implementation of a Try wrapper with two implmentations:
+`Success` and `Failure`.
+
+- `Success(value)`
+
+Returns a Success wrapper for the given value.
+
+- `Failure(value)`
+
+Returns a Failure wrapper for the given value.
+
+- `Try(f, arguments...)`
+
+Calls `f` with `null` as `this` and `arguments` as the arguments.
+If `f` throws an exception, returns a Failure instance wrapping the
+exception value; otherwise, returns a Success instance wrapping the
+value returned by `f`.
+
+- `t.map(f)`
+
+If `t` is a Failure, does nothing and returns `t`.  Otherwise, `f` is
+called with the wrapped value as its sole argument.  If `f` throws an
+exception, returns a Failure instance wrapping the exception value;
+otherwise, returns a Success instance wrapping the value returned by
+`f`.
+
+- `t.flatMap(f)`
+
+If `t` is a Failure, does nothing and returns `t`.  Otherwise, `f` is
+called with the wrapped value as its sole argument.  If `f` throws an
+exception, returns a Failure instance wrapping the exception value;
+otherwise, returns whatever `f` returned.
+
+- `t.foreach(f)`
+
+If `t` is a Success, calls `f` with the wrapped value as its sole
+argument.  Whether `t` is a Success or Failure, `t` is returned.
+
+- `t.filter(f)`
+
+If `t` is a Failure, does nothing and returns `t`.  Otherwise, `f` is
+called with the wrapped value as its sole argument.  If `f` throws an
+exception, returns a Failure instance wrapping the exception value; if
+`f` returns a false value, returns a Failure instance wrapping the
+string "predicate failed"; otherwise, returns `t`.
+
+- `t.isSuccess`
+
+Returns true if `t` is a Success, false otherwise.  Note that this is
+an attribute, not a function.
+
+
 ## WebRequest
 
 This is a thin wrapper around Conkeror's `XMLHttpRequest` interface
