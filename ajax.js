@@ -20,10 +20,10 @@
 
 function WebRequest(url, callback, responseType) {
     let async = true;
-    let headers = { };
+    let headers = new Map;
     return {
         async: function (flag) { async = flag; return this },
-        withHeader: function (name, value) { headers[name] = value; return this },
+        withHeader: function (name, value) { headers.set(name, value); return this },
         responseType: function (newType) { responseType = newType; return this },
         start: function () {
             const req = Cc["@mozilla.org/xmlextras/xmlhttprequest;1"]
@@ -35,8 +35,8 @@ function WebRequest(url, callback, responseType) {
                     callback(this.response);
                 }
             };
-            for (let header in headers) {
-                req.setRequestHeader(header, headers[header]);
+            for (let [name, value] of headers.entries()) {
+                req.setRequestHeader(name, value);
             }
             req.send(null);
         }
