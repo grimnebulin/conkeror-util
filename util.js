@@ -27,3 +27,28 @@ function make_descriptors(data) {
     ];
     return [ fds, () => out, () => err ];
 }
+
+function DefaultMap(generate, ...content) {
+    Map.apply(this, content);
+    this.get = function (key) {
+        if (this.has(key)) {
+            return Map.prototype.get.call(this, key);
+        } else {
+            const value = generate();
+            this.set(key, value);
+            return value;
+        }
+    };
+}
+
+DefaultMap.prototype = Map.prototype;
+
+function ArrayMap(...content) {
+    DefaultMap.apply(this, [ () => [], ...content ]);
+    this.push = function (key, value) {
+        this.get(key).push(value);
+        return this;
+    };
+}
+
+ArrayMap.prototype = DefaultMap.prototype;
