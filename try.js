@@ -20,9 +20,9 @@
 
 //  An implementation of a Try wrapper.
 
-function Try(func) {
+function Try(func, ...args) {
     try {
-        return Success(func.apply(null, Array.slice(arguments, 1)));
+        return Success(func(...args));
     } catch (e) {
         return Failure(e);
     }
@@ -33,7 +33,7 @@ function Success(value) {
         map: f => Try(f, value),
         flatMap: f => { try { return f(value) } catch (e) { return Failure(e) } },
         foreach: f => (f(value), obj),
-        filter: f => Try(f, value).flatMap(b => b ? obj : Failure("predicate failed")),
+        filter: f => obj.flatMap(v => f(v) ? obj : Failure("predicate failed")),
         toString: () => "Success(" + value + ")",
         get isSuccess() { return true }
     };
