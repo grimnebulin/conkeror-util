@@ -28,6 +28,14 @@ function make_descriptors(data) {
     return [ fds, () => out, () => err ];
 }
 
+Map.prototype.lookup = function (key) {
+    if (this.has(key)) {
+        return Some(this.get(key));
+    } else {
+        return None();
+    }
+};
+
 function DefaultMap(generate, ...content) {
     Map.apply(this, content);
     this.get = function (key) {
