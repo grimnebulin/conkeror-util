@@ -34,6 +34,7 @@ function Success(value) {
         flatMap: f => { try { return f(value) } catch (e) { return Failure(e) } },
         foreach: f => (f(value), obj),
         filter: f => obj.flatMap(v => f(v) ? obj : Failure("predicate failed")),
+        select: (f, _) => f(value),
         toString: () => "Success(" + value + ")",
         get isSuccess() { return true }
     };
@@ -46,6 +47,7 @@ function Failure(value) {
         flatMap: _ => obj,
         foreach: _ => obj,
         filter: _ => obj,
+        select: (_, f) => f(value),
         toString: () => "Failure(" + value + ")",
         get isSuccess() { return false }
     };
