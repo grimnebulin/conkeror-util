@@ -34,7 +34,7 @@
 //  let [enable, disable] = setup_mode({ normal: foo_keymap });
 //  define_page_mode("foo-mode", /foo\.com/, enable, disable);
 
-function setup_mode(modality, classes) {
+function setup_mode(modality, classes, on_enable, on_disable) {
     classes = classes || { };
 
     function enable(buffer) {
@@ -42,6 +42,7 @@ function setup_mode(modality, classes) {
         for (let key in classes) {
             buffer.default_browser_object_classes[key] = classes[key];
         }
+        if (on_enable) on_enable(buffer);
     }
 
     function disable(buffer) {
@@ -50,6 +51,7 @@ function setup_mode(modality, classes) {
         for (let key in classes) {
             delete buffer.default_browser_object_classes[key];
         }
+        if (on_disable) on_disable(buffer);
     }
 
     return [ enable, disable ];
